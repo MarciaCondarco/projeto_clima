@@ -51,11 +51,27 @@ e.preventDefault();
         // 👉 chama aqui, passando o weathercode certo
     atualizarFundo(clima.weathercode);
 
-} catch (erro) {
-    console.error('Erro ao consultar API:', erro);
-    alert('Erro ao buscar os dados climáticos.');
+} catch (url) {
+    fetchComErro(url);
+    console.error('Erro ao consultar API:', url);
+    document.getElementByI('erroApi').textContent = `Erro ao buscar os dados climáticos.`;
 }
 });
+
+async function fetchComErro(url) {
+    try{
+        const resposta = await fetch(url);
+        if(!resposta.ok){
+            throw new Error (`Erro na API (${resposta.status}): $(resposta.statusText)`);
+        }
+        return resposta;
+    }catch (e){
+        if (e.name === "TypeError"){
+            throw new Error("Erro na rede. Verifique a sua conexão com a internet");
+        }
+        throw e;
+    }
+}
 
 function atualizarFundo(weatherCode) {
 const body = document.body;
@@ -107,4 +123,21 @@ function descreverClima(codigo) {
     };
 
     return mapa[codigo] || "Condição desconhecida";
+}
+
+//tratamento de erro na rede e HTTP
+
+async function fetchComErro(url) {
+    try{
+        const resposta = await fetch(url);
+        if(!resposta.ok){
+            throw new Error (`Erro na API (${resposta.status}): $(resposta.statusText)`);
+        }
+        return resposta;
+    }catch (e){
+        if (e.name === "TypeError"){
+            throw new Error("Erro na rede. Verifique a sua conexão com a internet");
+        }
+        throw e;
+    }
 }
