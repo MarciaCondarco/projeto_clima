@@ -4,18 +4,22 @@ const resultado = document.getElementById('resultado');
 form.addEventListener('submit', async (e) => {
 e.preventDefault();
 
-const cidade = document.getElementById('cidade').value.trim();
-if (!cidade) return alert('Digite o nome de uma cidade.');
+    const cidade = document.getElementById('cidade').value.trim();
 
-const urlGeo = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cidade)}&count=1&language=pt&format=json`;
-try {
-    const respostaGeo = await fetch(urlGeo);
-    const dadosGeo = await respostaGeo.json();
+    if (!cidade) return alert('Digite o nome de uma cidade.');
+
+    try {
+        const urlGeo = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cidade)}&count=1&language=pt&format=json`;
+        const respostaGeo = await fetch(urlGeo);
+        const dadosGeo = await respostaGeo.json();
+    
 
     if (!dadosGeo.results || dadosGeo.results.length === 0) {
     alert('Cidade não encontrada!');
     return;
     }
+
+
 
     const cidadeInfo = dadosGeo.results[0];
     const latitude = cidadeInfo.latitude;
@@ -25,15 +29,26 @@ try {
     const urlClima = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
     const respostaClima = await fetch(urlClima);
     const dadosClima = await respostaClima.json();
-
     const clima = dadosClima.current_weather;
+    const descricaoClima = descreverClima(clima.weathercode);
 
     document.getElementById('nomeCidade').textContent = nomeFormatado;
     document.getElementById('temperatura').textContent = `🌡️ Temperatura: ${clima.temperature}°C`;
+    document.getElementById('descricao').textContent = `🌥️ Clima: ${descricaoClima}`;
+
 
     resultado.style.display = 'block';
 
-    // 👉 chama aqui, passando o weathercode certo
+    //filtrar apenas por cidades no Brasil
+    const cidadeBrasil = dadosGeo.results.find((item)=> item.country_code === "BR");
+    if(!cidadeBrasil){
+        nomeCidade.textContent="";
+        temperatura.textContent="";
+        descricao.textContent="";
+        document.getElementById('validacao').textContent = `❌ Por Enquanto, o sistema só funciona para cidades do Brasil`;
+        return;
+    }
+        // 👉 chama aqui, passando o weathercode certo
     atualizarFundo(clima.weathercode);
 
 } catch (erro) {
@@ -62,4 +77,34 @@ const body = document.body;
     }
 
   body.style.transition = "background 1s ease"; // suaviza a transição
+}
+
+//Traduz o código do tempo do Open-Meteo para uma descrição em português.
+
+function descreverClima(codigo) {
+    const mapa = {
+    0: "Céu limpo",
+    1: "Principalmente limpo",
+    2: "Parcialmente nublado",
+    3: "Nublado",
+    45: "Nevoeiro",
+    48: "Nevoeiro com gelo",
+    51: "Garoa fraca",
+    53: "Garoa moderada",
+    55: "Garoa intensa",
+    61: "Chuva fraca",
+    63: "Chuva moderada",
+    65: "Chuva forte",
+    71: "Neve fraca",
+    73: "Neve moderada",
+    75: "Neve forte",
+    80: "Aguaceiros fracos",
+    81: "Aguaceiros moderados",
+    82: "Aguaceiros fortes",
+    95: "Tempestade",
+    96: "Tempestade com granizo leve",
+    99: "Tempestade com granizo forte"
+    };
+
+    return mapa[codigo] || "Condição desconhecida";
 }
