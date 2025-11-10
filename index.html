@@ -6,6 +6,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Belanosima:wght@400;600;700&family=Chakra+Petch:wght@300&family=Delius&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Vollkorn:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css">
+
         <!-- link para o css -->
     <link rel="stylesheet" href="./assets/css/style.css">
     <title>Previsão do Clima</title>
@@ -17,6 +20,10 @@
     <main>
         <div class="clima-container">
             <div class="clima-content">
+                <div class="clima card" id="resultado">
+                    <h2 id="nomeCidade"></h2>
+                    <i id="iconeClima" class="wi wi-night-sleet"></i>
+                </div>
                 <div class="clima clima-form">
                     <form id="form-clima">
                         <label for="">Previsão do Tempo</label><br>

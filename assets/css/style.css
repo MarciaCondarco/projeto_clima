@@ -3,14 +3,18 @@
     padding: 0px;
 }
 body{
-    background-color: #FAE18F;
+    min-height: 100vh;
+    transition: background 1s ease;
     font-family: 'Poppins', sans-serif;
+    background-color: #87CEEB;
 }
+
 .clima-container{
     display: grid;
     place-items: center; /* centraliza vertical e horizontal */
     height: 100vh;
     border: 1px solid black;
+
 }
 .clima-content{
     display: flex;
@@ -18,9 +22,14 @@ body{
     align-items: center;    /* centraliza o conteúdo */
     gap: 10px;              /* espaço entre input e botão */
     margin-bottom: 30px;    /* espaço entre o formulário e o resultado */
-    border-radius: 5px;
+    border-radius: 55px;
     border: 1px solid #696969;
     padding: 30px;
+    background-color: rgba(255, 255, 255, 0.8);
+    opacity: 0.9;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* compatibilidade */
 }
 .clima{
     gap: 30px;
@@ -31,7 +40,7 @@ body{
 }   
 .clima button{
     padding: 5px;
-    border-radius: 3px;
+    border-radius: 9px;
 }
 .clima button:hover{
     box-shadow: black;
@@ -47,4 +56,11 @@ body{
     display: flex;
     flex-direction: column; /* coloca os elementos um embaixo do outro */
     align-items: center;    /* centraliza o conteúdo */
+}
+
+#iconeClima {
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    color: black;
 }

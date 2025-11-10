@@ -1,6 +1,8 @@
 const form = document.getElementById('form-clima');
 const resultado = document.getElementById('resultado');
 
+
+
 form.addEventListener('submit', async (e) => {
 e.preventDefault();
 
@@ -46,15 +48,21 @@ e.preventDefault();
         temperatura.textContent="";
         descricao.textContent="";
         document.getElementById('validacao').textContent = `❌ Por Enquanto, o sistema só funciona para cidades do Brasil`;
-        return;
     }
         // 👉 chama aqui, passando o weathercode certo
     atualizarFundo(clima.weathercode);
 
+        // icones
+    const iconeClasse = obterIconeClima(clima.weathercode);
+    const iconeElemento = document.getElementById('iconeClima');
+    iconeElemento.className = `wi ${iconeClasse}`;
+
+
+
 } catch (url) {
     fetchComErro(url);
     console.error('Erro ao consultar API:', url);
-    document.getElementByI('erroApi').textContent = `Erro ao buscar os dados climáticos.`;
+    document.alert('Erro ao buscar os dados climáticos.');
 }
 });
 
@@ -76,24 +84,28 @@ async function fetchComErro(url) {
 function atualizarFundo(weatherCode) {
 const body = document.body;
 
+    let background;
+
     if (weatherCode === 0) {
-        body.style.background = "linear-gradient(to bottom, #87CEFA, #fefefe)"; // céu limpo
+        background = "linear-gradient(to bottom, #87CEFA, #fefefe)"; // céu limpo
     } else if (weatherCode >= 1 && weatherCode <= 3) {
-        body.style.background = "linear-gradient(to bottom, #a4b0be, #dfe4ea)"; // nublado
+        background = "linear-gradient(to bottom, #a4b0be, #dfe4ea)"; // nublado
     } else if (weatherCode >= 45 && weatherCode <= 48) {
-        body.style.background = "linear-gradient(to bottom, #636e72, #b2bec3)"; // neblina
+        background = "linear-gradient(to bottom, #636e72, #b2bec3)"; // neblina
     } else if (weatherCode >= 51 && weatherCode <= 67) {
-        body.style.background = "linear-gradient(to bottom, #74b9ff, #a29bfe)"; // garoa
+        background = "linear-gradient(to bottom, #74b9ff, #a29bfe)"; // garoa
     } else if (weatherCode >= 80 && weatherCode <= 82) {
-        body.style.background = "linear-gradient(to bottom, #2c3e50, #4ca1af)"; // chuva
+        background = "linear-gradient(to bottom, #2c3e50, #4ca1af)"; // chuva
     } else if (weatherCode >= 95 && weatherCode <= 99) {
-        body.style.background = "linear-gradient(to bottom, #000000, #434343)"; // tempestade
+        background = "linear-gradient(to bottom, #000000, #434343)"; // tempestade
     } else {
-        body.style.background = "linear-gradient(to bottom, #bdc3c7, #2c3e50)"; // padrão
+        background = "linear-gradient(to bottom, #bdc3c7, #2c3e50)"; // padrão
     }
 
-  body.style.transition = "background 1s ease"; // suaviza a transição
+    body.style.background = background;
+    body.style.transition = "background 1s ease";
 }
+
 
 //Traduz o código do tempo do Open-Meteo para uma descrição em português.
 
@@ -140,4 +152,33 @@ async function fetchComErro(url) {
         }
         throw e;
     }
+}
+
+
+
+function obterIconeClima(codigo) {
+    const mapaIcones = {
+        0: "wi-day-sunny",
+        1: "wi-day-sunny-overcast",
+        2: "wi-day-cloudy",
+        3: "wi-cloudy",
+        45: "wi-fog",
+        48: "wi-fog",
+        51: "wi-sprinkle",
+        53: "wi-showers",
+        55: "wi-rain",
+        61: "wi-rain",
+        63: "wi-rain",
+        65: "wi-rain",
+        71: "wi-snow",
+        73: "wi-snow",
+        75: "wi-snow",
+        80: "wi-showers",
+        81: "wi-showers",
+        82: "wi-showers",
+        95: "wi-thunderstorm",
+        96: "wi-storm-showers",
+        99: "wi-storm-showers"
+    };
+    return mapaIcones[codigo] || "wi-na";
 }
