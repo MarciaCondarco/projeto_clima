@@ -1,49 +1,27 @@
 <!DOCTYPE html>
-<html lang="pt-bt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Belanosima:wght@400;600;700&family=Chakra+Petch:wght@300&family=Delius&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Vollkorn:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css">
-
-        <!-- link para o css -->
+    <title>Previsão do Tempo</title>
     <link rel="stylesheet" href="./assets/css/style.css">
-    <title>Previsão do Clima</title>
 </head>
 <body>
-    <header>
+    <div id="tempo">
+        <h1>Previsão do Tempo</h1>
+        <form id="form-clima">
+        <input type="text" id="cidade" placeholder="Digite a cidade" required>
+        <button type="submit">Buscar</button>
+        </form>
 
-    </header>
-    <main>
-        <div class="clima-container">
-            <div class="clima-content">
-                <div class="clima card" id="resultado">
-                    <h2 id="nomeCidade"></h2>
-                    <i id="iconeClima" class="wi wi-night-sleet"></i>
-                </div>
-                <div class="clima clima-form">
-                    <form id="form-clima">
-                        <label for="">Previsão do Tempo</label><br>
-                        <input type="text" id="cidade" placeholder="Digite o nome da cidade" required><br>
-                        <button type="submit">Buscar</button>
-                    </br>
-                    </form>
-                </div>
-    
-                <div class="clima card" id="resultado">
-                    <h2 id="nomeCidade"></h2>
-                    <p class="info" id="temperatura"></p>
-                    <p id="descricao"></p>
-                    <p id="validacao"></p>
-                    <p id="erroApi"></p>
-                </div>
-            </div>
+        <p id="validacao"></p>
+
+        <div id="resultado" style="display:none;">
+            <h2 id="nomeCidade"></h2>
+            <p id="temperatura"></p>
+            <p id="descricao"></p>
+            <div id="previsao5dias"></div>
         </div>
-
-    </main>
+    </div>
     <script src="./assets/js/api.js"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 const form = document.getElementById('form-clima');
 const resultado = document.getElementById('resultado');
 
+
 /**
  * @async 
  *
@@ -16,39 +17,22 @@ form.addEventListener('submit', async (e) => {
 e.preventDefault();
 
     const cidade = document.getElementById('cidade').value.trim();
-
-    if (!cidade) return alert('Digite o nome de uma cidade.');
+    if (!cidade) return alert('Digite uma cidade.');
 
     try {
-        const urlGeo = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cidade)}&count=1&language=pt&format=json`;
-        const respostaGeo = await fetch(urlGeo);
-        const dadosGeo = await respostaGeo.json();
-    
+    // 1. Buscar coordenadas da cidade
+    const urlGeo = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cidade)}&count=1&language=pt&format=json`;
+    const respostaGeo = await fetch(urlGeo);
+    const dadosGeo = await respostaGeo.json();
 
-    if (!dadosGeo.results || dadosGeo.results.length === 0) {
-    alert('Cidade não encontrada!');
-    return;
-    }
+    const cidadeBrasil = dadosGeo.results.find(item => item.country_code === "BR");
 
-
-
-    const cidadeInfo = dadosGeo.results[0];
-    const latitude = cidadeInfo.latitude;
-    const longitude = cidadeInfo.longitude;
-    const nomeFormatado = `${cidadeInfo.name}, ${cidadeInfo.country}`;
-
-    const urlClima = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
-    const respostaClima = await fetch(urlClima);
-    const dadosClima = await respostaClima.json();
-    const clima = dadosClima.current_weather;
-    const descricaoClima = descreverClima(clima.weathercode);
-
-    document.getElementById('nomeCidade').textContent = nomeFormatado;
-    document.getElementById('temperatura').textContent = `🌡️ Temperatura: ${clima.temperature}°C`;
-    document.getElementById('descricao').textContent = `🌥️ Clima: ${descricaoClima}`;
-
-
-    resultado.style.display = 'block';
+    if (!cidadeBrasil) {
+      // Limpa os campos visuais
+        nomeCidade.textContent = "";
+        temperatura.textContent = "";
+        descricao.textContent = "";
+        document.getElementById('previsao5dias').innerHTML = "";
 
     /**filtrar apenas por cidades no Brasil
      * * @type {Object|null}
@@ -60,142 +44,97 @@ e.preventDefault();
      * @property {string} admin1 Admin1 (estado/província) da cidade    
      * 
     */
-    const cidadeBrasil = dadosGeo.results.find((item)=> item.country_code === "BR");
-    if(!cidadeBrasil){
-        nomeCidade.textContent="";
-        temperatura.textContent="";
-        descricao.textContent="";
-        document.getElementById('validacao').textContent = `❌ Por Enquanto, o sistema só funciona para cidades do Brasil`;
-    }
-        // 👉 chama aqui, passando o weathercode certo
-    atualizarFundo(clima.weathercode);
 
-        // icones
-    const iconeClasse = obterIconeClima(clima.weathercode);
-    const iconeElemento = document.getElementById('iconeClima');
-    iconeElemento.className = `wi ${iconeClasse}`;
+        // Mensagem de validação mais destacada
+        const validacao = document.getElementById('validacao');
+        validacao.textContent = `❌ Oops! Por enquanto, o sistema só funciona para cidades do Brasil.`;
+        validacao.style.color = "red";
+        validacao.style.fontWeight = "bold";
+        validacao.style.marginTop = "1rem";
 
+      // Oculta o resultado, se estiver visível
+        resultado.style.display = "none";
 
-
-} catch (url) {
-    fetchComErro(url);
-    console.error('Erro ao consultar API:', url);
-    document.alert('Erro ao buscar os dados climáticos.');
-}
-});
-
-/**@async 
- * @param {string} url
- * @return {Promise<Response>} resposta da fetch
- */
-
-async function fetchComErro(url) {
-    try{
-        const resposta = await fetch(url);
-        if(!resposta.ok){
-            throw new Error (`Erro na API (${resposta.status}): $(resposta.statusText)`);
-        }
-        return resposta;
-    }catch (e){
-        if (e.name === "TypeError"){
-            throw new Error("Erro na rede. Verifique a sua conexão com a internet");
-        }
-        throw e;
-    }
-}
-
-/**
- * @function atualizarFundo Atualiza o fundo da página com base no código do clima
- * @param {number} weatherCode Código do clima conforme a API Open-Meteo
- */
-
-function atualizarFundo(weatherCode) {
-const body = document.body;
-
-    let background;
-
-    if (weatherCode === 0) {
-        background = "linear-gradient(to bottom, #87CEFA, #fefefe)"; // céu limpo
-    } else if (weatherCode >= 1 && weatherCode <= 3) {
-        background = "linear-gradient(to bottom, #a4b0be, #dfe4ea)"; // nublado
-    } else if (weatherCode >= 45 && weatherCode <= 48) {
-        background = "linear-gradient(to bottom, #636e72, #b2bec3)"; // neblina
-    } else if (weatherCode >= 51 && weatherCode <= 67) {
-        background = "linear-gradient(to bottom, #74b9ff, #a29bfe)"; // garoa
-    } else if (weatherCode >= 80 && weatherCode <= 82) {
-        background = "linear-gradient(to bottom, #2c3e50, #4ca1af)"; // chuva
-    } else if (weatherCode >= 95 && weatherCode <= 99) {
-        background = "linear-gradient(to bottom, #000000, #434343)"; // tempestade
-    } else {
-        background = "linear-gradient(to bottom, #bdc3c7, #2c3e50)"; // padrão
+      return; // Interrompe o fluxo
     }
 
-    body.style.background = background;
-    body.style.transition = "background 1s ease";
-}
+
+    if (!dadosGeo.results || dadosGeo.results.length === 0) {
+        alert('Cidade não encontrada!');
+        return;
+    }
+
+    const cidadeInfo = dadosGeo.results[0];
+    const latitude = cidadeInfo.latitude;
+    const longitude = cidadeInfo.longitude;
+    const nomeFormatado = `${cidadeInfo.name}, ${cidadeInfo.country}`;
+
+    // 2. Buscar clima atual
+    const urlAtual = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
+    const respostaAtual = await fetch(urlAtual);
+    const dadosAtual = await respostaAtual.json();
+    const clima = dadosAtual.current_weather;
+
+    // 3. Buscar previsão de 5 dias
+    const urlPrevisao = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_min,temperature_2m_max,weathercode&forecast_days=5&timezone=auto`;
+    const respostaPrevisao = await fetch(urlPrevisao);
+    const dadosPrevisao = await respostaPrevisao.json();
+
+    // 4. Exibir dados
+    document.getElementById('nomeCidade').textContent = nomeFormatado;
+    document.getElementById('temperatura').textContent = `🌡️ Temperatura atual: ${clima.temperature}°C`;
+    document.getElementById('descricao').textContent = `🌥️ Condição: ${descreverClima(clima.weathercode)}`;
+    resultado.style.display = 'block';
+
+    exibirPrevisao5Dias(dadosPrevisao.daily);
 
 
-//Traduz o código do tempo do Open-Meteo para uma descrição em português.
+    } catch (erro) {
+        console.error('Erro ao buscar dados:', erro);
+        alert('Erro ao buscar dados do clima.');
+    }
+    });
 
-
-function descreverClima(codigo) {
+    function descreverClima(codigo) {
     const mapa = {
     0: "Céu limpo",
     1: "Principalmente limpo",
     2: "Parcialmente nublado",
     3: "Nublado",
     45: "Nevoeiro",
-    48: "Nevoeiro com gelo",
-    51: "Garoa fraca",
-    53: "Garoa moderada",
-    55: "Garoa intensa",
     61: "Chuva fraca",
     63: "Chuva moderada",
     65: "Chuva forte",
-    71: "Neve fraca",
-    73: "Neve moderada",
-    75: "Neve forte",
-    80: "Aguaceiros fracos",
-    81: "Aguaceiros moderados",
-    82: "Aguaceiros fortes",
-    95: "Tempestade",
-    96: "Tempestade com granizo leve",
-    99: "Tempestade com granizo forte"
+    95: "Tempestade"
     };
+    return mapa[codigo] || "Clima desconhecido";
+    }
 
-    return mapa[codigo] || "Condição desconhecida";
-}
+function exibirPrevisao5Dias(dados) {
+    const dias = dados.time;
+    const minimas = dados.temperature_2m_min;
+    const maximas = dados.temperature_2m_max;
+    const codigos = dados.weathercode;
 
-/** 
- * @function obterIconeClima Mapeia o código do clima para a classe de ícone correspondente
- * @param {number} codigo Código do clima conforme a API Open-Meteo
- * @return {string} Classe do ícone correspondente
-*/
+    const container = document.getElementById('previsao5dias');
+    container.innerHTML = '';
 
+    for (let i = 0; i < dias.length; i++) {
+        const data = new Date(dias[i]);
+        const diaSemana = data.toLocaleDateString('pt-BR', { weekday: 'long' });
+        const dia = data.getDate();
+        const mes = data.toLocaleDateString('pt-BR', { month: 'long' });
+        const descricao = descreverClima(codigos[i]);
 
-function obterIconeClima(codigo) {
-    const mapaIcones = {
-        0: "wi-day-sunny",
-        1: "wi-day-sunny-overcast",
-        2: "wi-day-cloudy",
-        3: "wi-cloudy",
-        45: "wi-fog",
-        48: "wi-fog",
-        51: "wi-sprinkle",
-        53: "wi-showers",
-        55: "wi-rain",
-        61: "wi-rain",
-        63: "wi-rain",
-        65: "wi-rain",
-        71: "wi-snow",
-        73: "wi-snow",
-        75: "wi-snow",
-        80: "wi-showers",
-        81: "wi-showers",
-        82: "wi-showers",
-        95: "wi-thunderstorm",
-        96: "wi-storm-showers",
-        99: "wi-storm-showers"
-    };
-    return mapaIcones[codigo] || "wi-na";
+    const bloco = document.createElement('div');
+    bloco.className = 'dia-previsao';
+    bloco.innerHTML = `
+        <strong>${diaSemana}</strong><br>
+        ${dia} de ${mes}<br>
+        ${descricao}<br>
+        🔺 ${maximas[i]}°<br>
+        🔻 ${minimas[i]}°
+    `;
+    container.appendChild(bloco);
+    }
 }
