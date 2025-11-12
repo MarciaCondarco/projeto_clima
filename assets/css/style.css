@@ -24,3 +24,9 @@ body {
     flex-direction: column; /* coloca os elementos um embaixo do outro */
     align-items: center;    /* centraliza o conteúdo */
 }
+
+#iconeClima {
+  font-size: 48px;
+  margin: 1rem 0;
+  color: #333;
+}

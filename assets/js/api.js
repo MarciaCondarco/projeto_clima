@@ -74,6 +74,10 @@ e.preventDefault();
     const respostaAtual = await fetch(urlAtual);
     const dadosAtual = await respostaAtual.json();
     const clima = dadosAtual.current_weather;
+    const iconeClasse = obterIconeClima(clima.weathercode);
+    const iconeElemento = document.getElementById('iconeClima');
+    iconeElemento.className = `wi ${iconeClasse}`;
+
 
     // 3. Buscar previsão de 5 dias
     const urlPrevisao = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_min,temperature_2m_max,weathercode&forecast_days=5&timezone=auto`;
@@ -137,4 +141,32 @@ function exibirPrevisao5Dias(dados) {
     `;
     container.appendChild(bloco);
     }
+}
+
+
+function obterIconeClima(codigo) {
+  const mapaIcones = {
+    0: "wi-day-sunny",
+    1: "wi-day-sunny-overcast",
+    2: "wi-day-cloudy",
+    3: "wi-cloudy",
+    45: "wi-fog",
+    48: "wi-fog",
+    51: "wi-sprinkle",
+    53: "wi-showers",
+    55: "wi-rain",
+    61: "wi-rain",
+    63: "wi-rain",
+    65: "wi-rain",
+    71: "wi-snow",
+    73: "wi-snow",
+    75: "wi-snow",
+    80: "wi-showers",
+    81: "wi-showers",
+    82: "wi-showers",
+    95: "wi-thunderstorm",
+    96: "wi-storm-showers",
+    99: "wi-storm-showers"
+  };
+  return mapaIcones[codigo] || "wi-na";
 }

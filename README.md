@@ -1,34 +1,50 @@
-# 🌦️ Projeto Clima
+# 🌤️ Previsão do Tempo com Open-Meteo
 
-Aplicação web que consulta e exibe dados meteorológicos em tempo real para cidades brasileiras, utilizando a API da Open-Meteo.
+Este projeto é uma aplicação web simples que exibe a previsão do tempo atual e dos próximos 5 dias para cidades brasileiras, utilizando a [API Open-Meteo](https://open-meteo.com/).
 
-## 📦 Tecnologias utilizadas
-
-- HTML5
-- CSS3
-- JavaScript (ES6+)
-- JSDoc para documentação
-- Jest para testes automatizados
+---
 
 ## 🚀 Funcionalidades
 
-- Busca por cidade brasileira
-- Exibição de temperatura e descrição do clima
-- Ícone e fundo dinâmico conforme o tempo
-- Validação de entrada
-- Tratamento de erros de rede e API
+- Busca de cidade com validação para cidades brasileiras
+- Clima atual: temperatura, condição e ícone
+- Previsão dos próximos 5 dias com mínimas, máximas e descrição
+- Interface responsiva e amigável
 
-## 📄 Documentação
+---
 
-A documentação técnica foi gerada com JSDoc e está disponível na pasta `/docs`. Para visualizar, abra o arquivo `index.html` no navegador.
+## 🛠️ Tecnologias Utilizadas
 
-## 🧪 Testes
+- HTML5
+- CSS3
+- JavaScript (ES6)
+- API Open-Meteo (clima e geolocalização)
 
-Os testes foram escritos com Jest e podem ser executados com:
+---
+
+## 📦 Instalação
+
+1. Clone o repositório:
 
 ```bash
-npm test
+git clone https://github.com/seu-usuario/previsao-tempo.git
 ```
 
-## 👩🏽Autor
-Marcy - desenvolvedora FullStack
+## 2. Acesse a pasta do projeto:
+
+```bash
+cd previsao-tempo
+```
+
+Abra o arquivo index.html no navegador.
+
+### 3. 💻 Como Usar 
+
+1. Digite o nome de uma cidade brasileira no campo de busca.
+2. Clique em Buscar
+3. Veja o clima atual e a previsão dos próximos dias.
+
+## ⚠️ Regras de Validação
+Apenas cidades do Brasil são aceitas.
+
+Caso a cidade não seja brasileira, uma mensagem de erro será exibida.
