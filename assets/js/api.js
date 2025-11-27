@@ -21,9 +21,10 @@ e.preventDefault();
       alert('Digite uma cidade.');
       return
     } 
-    if (/^\d+$/.test(cidade)) {
+    else if (/^\d+$/.test(cidade)) {
     alert('⚠️ O nome da cidade não pode conter apenas números.');
-    window.location.href = "index.html"
+    window.location.href = "index.html";
+
     return;
   }
 
