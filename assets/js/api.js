@@ -17,7 +17,16 @@ form.addEventListener('submit', async (e) => {
 e.preventDefault();
 
     const cidade = document.getElementById('cidade').value.trim();
-    if (!cidade) return alert('Digite uma cidade.');
+    if (!cidade){
+      alert('Digite uma cidade.');
+      return
+    } 
+    if (/^\d+$/.test(cidade)) {
+    alert('⚠️ O nome da cidade não pode conter apenas números.');
+    window.location.href = "index.html"
+    return;
+  }
+
 
     try {
     // 1. Buscar coordenadas da cidade
