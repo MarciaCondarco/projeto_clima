@@ -26,6 +26,8 @@ e.preventDefault();
     const dadosGeo = await respostaGeo.json();
 
     const cidadeBrasil = dadosGeo.results.find(item => item.country_code === "BR");
+    
+    
 
     if (!cidadeBrasil) {
       // Limpa os campos visuais
@@ -34,23 +36,60 @@ e.preventDefault();
         descricao.textContent = "";
         document.getElementById('previsao5dias').innerHTML = "";
 
-    /**filtrar apenas por cidades no Brasil
-     * * @type {Object|null}
-     * @property {string} country_code Código do país (ex: "BR" para Brasil)
-     * @property {string} name Nome da cidade
-     * @property {number} latitude Latitude da cidade
-     * @property {number} longitude Longitude da cidade
-     * @property {string} timezone Fuso horário da cidade
-     * @property {string} admin1 Admin1 (estado/província) da cidade    
-     * 
-    */
+    // /**filtrar apenas por cidades no Brasil
+    //  * * @type {Object|null}
+    //  * @property {string} country_code Código do país (ex: "BR" para Brasil)
+    //  * @property {string} name Nome da cidade
+    //  * @property {number} latitude Latitude da cidade
+    //  * @property {number} longitude Longitude da cidade
+    //  * @property {string} timezone Fuso horário da cidade
+    //  * @property {string} admin1 Admin1 (estado/província) da cidade    
+    //  * 
+    // */
 
         // Mensagem de validação mais destacada
         const validacao = document.getElementById('validacao');
+        const btnVoltar = document.getElementById('btnVoltar');
         validacao.textContent = `❌ Oops! Por enquanto, o sistema só funciona para cidades do Brasil.`;
+        validacao.style.position = "absolute";
+        validacao.style.top = "50%";
+        validacao.style.left = "50%";
+        validacao.style.transform = "translate(-50%, -50%)";
         validacao.style.color = "red";
         validacao.style.fontWeight = "bold";
-        validacao.style.marginTop = "1rem";
+        validacao.style.padding = "20px";
+        validacao.style.backgroundColor = "#ffe6e6";
+        validacao.style.border = "2px solid #b30000";
+        validacao.style.borderRadius = "12px";
+        validacao.style.boxShadow = "0 0 10px rgba(0,0,0,0.2)";
+        validacao.style.textAlign = "center";
+        validacao.style.zIndex = "1000";  
+
+          // Botão de voltar
+        btnVoltar.textContent = "Voltar";
+        btnVoltar.style.position = "absolute";
+        btnVoltar.style.top = "calc(50% + 100px)";
+        btnVoltar.style.left = "50%";
+        btnVoltar.style.transform = "translateX(-50%)";
+        btnVoltar.style.padding = "12px 24px";
+        btnVoltar.style.fontSize = "16px";
+        btnVoltar.style.fontWeight = "bold";
+        btnVoltar.style.borderRadius = "8px";
+        btnVoltar.style.border = "none";
+        btnVoltar.style.backgroundColor = "#007BFF";
+        btnVoltar.style.color = "#fff";
+        btnVoltar.style.cursor = "pointer";
+        btnVoltar.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
+        btnVoltar.style.transition = "background 0.3s ease";
+        btnVoltar.style.display = "block";
+
+        // Efeito hover
+        btnVoltar.onmouseover = () => {
+          btnVoltar.style.backgroundColor = "#0056b3";
+        };
+        btnVoltar.onmouseout = () => {
+          btnVoltar.style.backgroundColor = "#007BFF";
+        };
 
       // Oculta o resultado, se estiver visível
         resultado.style.display = "none";
@@ -125,21 +164,32 @@ function exibirPrevisao5Dias(dados) {
 
     for (let i = 0; i < dias.length; i++) {
         const data = new Date(dias[i]);
-        const diaSemana = data.toLocaleDateString('pt-BR', { weekday: 'long' });
-        const dia = data.getDate();
-        const mes = data.toLocaleDateString('pt-BR', { month: 'long' });
+
+        const diasAbreviados = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+        const diaSemana = diasAbreviados[data.getDay()];
+
+        const dataFormatada = data.toLocaleDateString('pt-BR');
         const descricao = descreverClima(codigos[i]);
 
-    const bloco = document.createElement('div');
-    bloco.className = 'dia-previsao';
-    bloco.innerHTML = `
-        <strong>${diaSemana}</strong><br>
-        ${dia} de ${mes}<br>
-        ${descricao}<br>
-        🔺 ${maximas[i]}°<br>
-        🔻 ${minimas[i]}°
-    `;
-    container.appendChild(bloco);
+
+        
+        const bloco = document.createElement('div');
+        bloco.className = 'dia-previsao';
+        // Estilo direto via JavaScript
+        bloco.style.justifyContent = 'center'
+        bloco.style.padding = '20px';
+        bloco.style.marginBottom = '10px';
+        bloco.style.borderRadius = '12px';
+        bloco.style.backgroundColor = '#ffffff';
+
+        bloco.innerHTML = `         
+            <strong>${diaSemana}</strong><br>
+            ${dataFormatada}<br>
+            ${descricao}<br>
+            🔺 ${maximas[i]}°<br>
+            🔻 ${minimas[i]}°
+        `;
+        container.appendChild(bloco);
     }
 }
 
@@ -170,3 +220,13 @@ function obterIconeClima(codigo) {
   };
   return mapaIcones[codigo] || "wi-na";
 }
+
+// function
+function buscarCidade(){
+  document.getElementById("tempo").style.display="none";
+  document.getElementById("clima").style.display = "block";
+}
+
+
+
+

@@ -1,9 +1,15 @@
 body {
     font-family: Arial, sans-serif;
-    background: #e0f7fa;
-    padding: 2rem;
-    text-align: center;
+    background-image: url(https://ik.imagekit.io/xmqgsi96x8/paisagemfundo1.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;       /* faz a imagem ocupar toda a tela */
+    background-position: center;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
 }
+
+
 
 #previsao5dias {
     display: flex;
@@ -14,20 +20,134 @@ body {
 
 .dia-previsao {
     background: #ffffff;
-    padding: 1rem;
+    padding: 3rem;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+#clima{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid black;
+
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 8px;
+    color: black;
+    backdrop-filter: blur(10px);
 }
 
 #tempo{
     display: flex;
-    flex-direction: column; /* coloca os elementos um embaixo do outro */
+    justify-content: center;
     align-items: center;    /* centraliza o conteúdo */
+
+    /* Centralização */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+/* CLima pesquisada */
+#resultado{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #4682B4;
+}
+/* icone */
+
+
+/* nome  da cidade */
+.clima-nome{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* temperatura */
+#temperatura{
+    display: flex;
+    justify-content: center;
+}
+/* descrição do clima*/
+#descricao{
+    display: flex;
+    justify-content: center;
+}
+/* botão de voltar */
+.btn-clima{
+    background-color: #4682B4;
+    padding: 20px 100px;
+    text-decoration: none;
+    color: #ffffff;
+    border-radius: 9px;
+}
+.btn-clima-voltar{
+    display: flex;
+    justify-content: center;
+}
+
+@keyframes girar {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 #iconeClima {
-  font-size: 48px;
-  margin: 1rem 0;
-  color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+    margin: 1rem 0;
+    color: #333;
+        animation: pulsar 2s infinite;
+    transition: transform 0.3s ease;
+}
+
+.tempo-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.tempo-content{
+    width: 20rem;
+    padding: 10px;
+}
+
+#cidade{
+    border: none;
+    border-radius: 12px;
+    padding: 6px;
+    width: 75%;
+}
+#cidade:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.tempo-div{
+    border-radius: 12px;
+    background-color: #ffffff;
+    padding: 6px;
+}
+.tempo-div button{
+    border-radius: 10px;
+    background-color: transparent;
+    border: none;
+    padding: 6px;
+}
+.tempo-div button:hover{
+    background-color: #4682B4;
+    color: #ffffff;
+}
+.dia-previsao{
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    width: fit-content; /* ou defina uma largura maior */
 }
 

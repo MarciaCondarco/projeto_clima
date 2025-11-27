@@ -8,24 +8,53 @@
     <title>Previsão do Tempo</title>
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
-<body>
+<body >
     <div id="tempo">
-        <h1>Previsão do Tempo</h1>
-        <form id="form-clima">
-        <input type="text" id="cidade" placeholder="Digite a cidade" required>
-        <button type="submit">Buscar</button>
-        </form>
-
-        <p id="validacao"></p>
-
-        <div id="resultado" style="display:none;">
-            <i id="iconeClima" class="wi"></i>
-            <h2 id="nomeCidade"></h2>
-            <p id="temperatura"></p>
-            <p id="descricao"></p>
-            <div id="previsao5dias"></div>
+        <div class="tempo-container">
+            <div class="tempo-content">
+                <h1>Previsão do Tempo</h1>
+            </div>
+            <div class="tempo-content">
+                <form id="form-clima">
+                    <div class="tempo-div">
+                        <input type="text" id="cidade" placeholder="Digite a cidade" required>
+                        <button type="submit" onclick="buscarCidade()">Buscar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+
+    </div>
+    <div id="validacao"></div>
+    <!-- <button id="btnVoltar" style="display: none;" >Voltar</button> -->
+    <button style="display: none;"  id="btnVoltar" onclick="window.location.href='index.html'">Voltar</button>
+    <!-- cidade pesquisada -->
+    <div id="resultado" style="display:none;">
+        <div id="clima">
+            <div>
+                <p id="validacao"></p>
+            </div>
+            <div>
+                <i id="iconeClima" class="wi"></i>
+            </div>
+            <div class="clima-nome">
+                <h2 id="nomeCidade"></h2>
+            </div>
+            <div>
+                <p id="temperatura"></p>
+            </div>
+            <div>
+                <p id="descricao"></p>
+            </div>
+            <div id="previsao5dias"></div>
+            <div id="previsao5dias" class="previsao-container"></div>   
+            <div class="btn-clima-voltar">
+                <a href="./index.html" class="btn-clima">Voltar</a>      
+            </div>
+        </div>
+    </div>
+    
     <script src="./assets/js/api.js"></script>
 </body>
 </html>
